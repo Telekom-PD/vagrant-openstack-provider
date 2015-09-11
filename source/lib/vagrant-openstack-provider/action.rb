@@ -33,6 +33,7 @@ module VagrantPlugins
             if env[:machine_state_id] == :not_created
               b2.use Message, I18n.t('vagrant_openstack.not_created')
             else
+              b2.use Provision
               b2.use ProvisionWrapper
               b2.use SyncFolders
             end
@@ -99,6 +100,7 @@ module VagrantPlugins
             case env[:machine_state_id]
             when :not_created
               ssh_disabled = env[:machine].provider_config.ssh_disabled
+              b2.use Provision unless ssh_disabled
               b2.use ProvisionWrapper unless ssh_disabled
               b2.use SyncFolders
               b2.use CreateStack
